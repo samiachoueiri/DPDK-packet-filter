@@ -6,7 +6,7 @@
 #include <rte_mempool.h>
 #include <rte_mbuf.h>
 
-#include "minimal_port.h"
+#include "port_config.h"
 
 int port_probe_and_config(uint16_t port_id, struct rte_mempool *mbuf_pool)
 {
@@ -21,7 +21,7 @@ int port_probe_and_config(uint16_t port_id, struct rte_mempool *mbuf_pool)
 
     struct rte_eth_conf port_conf = {
         .rxmode = {
-            .max_rx_pkt_len = RTE_ETHER_MAX_LEN,
+            .max_lro_pkt_size = RTE_ETHER_MAX_LEN,
             .mq_mode = RTE_ETH_MQ_RX_NONE,
         },
         .txmode = {

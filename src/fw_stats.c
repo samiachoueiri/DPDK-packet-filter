@@ -16,7 +16,7 @@ struct fw_stats {
 struct fw_stats *fw_stats_create(void) {
     struct fw_stats *s = calloc(1, sizeof(*s));
     if (!s) return NULL;
-    s->lock = RTE_SPINLOCK_INITIALIZER;
+    rte_spinlock_init(&s->lock);  // Use init function instead of macro
     return s;
 }
 
@@ -38,6 +38,8 @@ void fw_stats_inc_dropped_malformed(struct fw_stats *s, uint64_t v) { _inc(s, &s
 void fw_stats_inc_tx_failures(struct fw_stats *s, uint64_t v) { _inc(s, &s->tx_failures, v); }
 
 void fw_stats_print(struct fw_stats *s) {
+    if (!s) return;
+    
     rte_spinlock_lock(&s->lock);
     printf("=== stats ===\n");
     printf("total: %"PRIu64"\n", s->total);

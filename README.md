@@ -1,5 +1,4 @@
-# Project Title  
-## DPDK Packet Filter  
+# DPDK Packet Filter  
 A high-performance packet filtering system for controlling and securing traffic between an internal network and an external network.
 
 ---

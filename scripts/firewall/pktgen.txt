@@ -1,0 +1,85 @@
+server 1 sending to server 2
+-------------------accept--------------------
+sudo pktgen -l 0,1 -n 4 -a 07:00.0 -- -P -m "1.0"
+++++++++++++++++++++++++++++++++++++++++++++++++++
+set 0 src mac 00:00:00:00:00:01
+set 0 dst mac 00:00:00:00:00:21
+set 0 size 1500
+set 0 burst 32
+set 0 dport 25
+set 0 sport 80
+set 0 rate 1
+---------------------------------------------
+server 1 sending to server 2
+-------------------reject--------------------
+set 0 src mac 00:00:00:00:00:01
+set 0 dst mac 00:00:00:00:00:21
+set 0 size 1500
+set 0 burst 32
+set 0 dport 80
+set 0 sport 80
+set 0 rate 1
+
+
+
+
+server 3 sending to server 2
+-------------------accept--------------------
+sudo pktgen -l 0,1 -n 4 -a 07:00.0 -- -P -m "1.0"
+ethtool -S enp8s0np1 | grep tx_packets_phy
+++++++++++++++++++++++++++++++++++++++++++++++++++
+set 0 src mac 00:00:00:00:00:03
+set 0 dst mac 00:00:00:00:00:22
+set 0 size 1500
+set 0 burst 32
+set 0 dport 25
+set 0 sport 80
+set 0 rate 1
+---------------------------------------------
+server 3 sending to server 2
+-------------------reject--------------------
+set 0 src mac 00:00:00:00:00:03
+set 0 dst mac 00:00:00:00:00:22
+set 0 size 1500
+set 0 burst 32
+set 0 dport 80
+set 0 sport 80
+set 0 rate 1
+
+-------------------------------------------------------------------
+
+server 1: 
+sudo arp -d 192.168.10.2
+sudo arp -s 192.168.10.2 00:00:00:00:00:03
+server 3:
+sudo arp -d 192.168.20.2
+sudo arp -s 192.168.20.2 00:00:00:00:00:01
+
+server 1: client
+wget 192.168.20.1:80
+server 3: server
+sudo python3 -m http.server --bind 192.168.20.1 80
+
+
+server 3: client
+wget 192.168.10.1:80
+server 1: server
+sudo python3 -m http.server --bind 192.168.10.1 80
+
+------------------------------------------------------ most recent arp output
+ubuntu@server1:~$ arp
+Address                  HWtype  HWaddress           Flags Mask            Iface
+192.168.10.2             ether   00:00:00:00:00:03   CM                    enp7s0np0
+_gateway                 ether   fa:16:3e:e3:04:cc   C                     enp3s0
+10.20.4.11               ether   fa:16:3e:2a:b5:61   C                     enp3s0
+
+ubuntu@server2:~/firewall$ arp
+Address                  HWtype  HWaddress           Flags Mask            Iface
+192.168.20.1             ether   00:00:00:00:00:03   CM                    enp8s0np1
+192.168.10.1             ether   00:00:00:00:00:01   CM                    enp7s0np0
+10.30.6.11               ether   fa:16:3e:5a:01:0d   C                     enp3s0
+
+ubuntu@server3:~$ arp
+Address                  HWtype  HWaddress           Flags Mask            Iface
+10.30.6.11               ether   fa:16:3e:76:ca:1a   C                     enp3s0
+192.168.20.2             ether   00:00:00:00:00:01   CM                    enp7s0np0

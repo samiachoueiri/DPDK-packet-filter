@@ -45,12 +45,12 @@ Below is the network topology used by the system:
 
 ## 3. Repository Structure
 .
-├── include/           # Header files for filter logic
-├── src/               # Main DPDK application source code
-├── scripts/           # Setup, build, and execution scripts
-├── threat-model/      # Documentation of security analysis and assumptions
-├── figs/              # Figures used in documentation/presentations (topology, diagrams, etc.)
-├── Report.ipynb       # Main report & notebook for running/testing the system
-├── Presentation.pptx  # Project presentation
-└── README.md          # This file
+├── include/           # Header files for filter logic </br>
+├── src/               # Main DPDK application source code </br>
+├── scripts/           # Setup, build, and execution scripts </br>
+├── threat-model/      # Documentation of security analysis and assumptions </br>
+├── figs/              # Figures used in documentation/presentations (topology, diagrams, etc.) </br>
+├── Report.ipynb       # Main report & notebook for running/testing the system </br>
+├── Presentation.pptx  # Project presentation </br>
+└── README.md          # This file </br>
 

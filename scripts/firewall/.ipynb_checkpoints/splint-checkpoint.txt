@@ -1,2 +1,0 @@
-sudo apt install splint
-splint +boundswrite +boundsread fw.c
